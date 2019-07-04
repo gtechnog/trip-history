@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sample.triphistory.R;
-import com.sample.triphistory.ui.adapters.TripHistoryListAdapter;
+import com.sample.triphistory.ui.TripHistoryListAdapter;
 import com.sample.triphistory.viewmodel.TripHistoryListViewModel;
 
 

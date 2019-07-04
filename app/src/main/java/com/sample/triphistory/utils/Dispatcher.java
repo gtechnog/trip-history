@@ -7,8 +7,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.sample.triphistory.constant.BundleKeys;
-import com.sample.triphistory.ui.activities.TripDetailActivity;
+import com.sample.triphistory.ui.TripDetailActivity;
 
+/**
+ *  Dispatcher is responsible to dispatch the activities/fragments, single entry points for navigation
+ *  in application.
+ */
 public class Dispatcher {
 
     public static void showTripDetailActivity(@NonNull Context context, @NonNull String tripId) {

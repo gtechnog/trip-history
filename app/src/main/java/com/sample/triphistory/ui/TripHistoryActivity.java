@@ -1,8 +1,8 @@
 package com.sample.triphistory.ui.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sample.triphistory.R;
 import com.sample.triphistory.ui.fragments.TripHistoryListFragment;
