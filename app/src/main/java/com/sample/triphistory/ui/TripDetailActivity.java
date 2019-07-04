@@ -4,7 +4,6 @@ import android.app.Application;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
@@ -22,6 +21,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.sample.triphistory.R;
 import com.sample.triphistory.constant.BundleKeys;
+import com.sample.triphistory.constant.Constants;
 import com.sample.triphistory.model.Step;
 import com.sample.triphistory.utils.Injector;
 import com.sample.triphistory.viewmodel.TripDetailViewModel;
@@ -64,10 +64,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         mMap.addMarker(viewModel.getEndMarkerOptions()).setTitle(" End Point");
 
         final Marker marker = mMap.addMarker(viewModel.getStartMarkerOptions());
-                marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_media_pause));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_directions));
 
-
-        final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(viewModel.getTripBounds(), 128);
+        final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(viewModel.getTripBounds(), 64);
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
@@ -77,55 +76,59 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        animateMarker(mMap, marker, viewModel.getPath(),viewModel.getStartTimeInMillies() , viewModel.getEndTimeInMillies());
+                        animateMarker(marker);
                     }
                 }, 500);
             }
         });
     }
 
-    public PolylineOptions addPolyLineToPath() {
+    /**
+     * adding the line along the path
+     */
+    private void addPolyLineToPath() {
         List<LatLng> listOfPath = viewModel.getPathLatLngList();
-        PolylineOptions options = null;
+        PolylineOptions options;
         for (int i = 0; i < listOfPath.size() - 1; i++) {
             LatLng src = listOfPath.get(i);
             LatLng dest = listOfPath.get(i + 1);
             options = new PolylineOptions();
             options.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude));
-            options.width(5).color(Color.LTGRAY).geodesic(true);
+            options.width(5).color(Color.GREEN).geodesic(true);
             mMap.addPolyline(options);
         }
-        return options;
     }
 
-    private static void animateMarker(GoogleMap myMap, final Marker marker, final List<Step> directionPoint, final long start, final long end) {
+    /**
+     *  animate the market along the path
+     * @param marker marker that has to move
+     */
+    private void animateMarker(final Marker marker) {
         final Handler handler = new Handler();
-        final long duration = end -start;
+        final long end = viewModel.getEndTimeInMillies();
+        final long start = viewModel.getStartTimeInMillies();
+        final long duration = end - start;
         final Interpolator interpolator = new LinearInterpolator();
-        final long animateDuration = 20000;
+        final List<Step> path = viewModel.getPath();
 
         handler.post(new Runnable() {
             int i = 0;
 
             @Override
             public void run() {
-                long elapsed = directionPoint.get(i).getTime_millis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
+                long elapsed = path.get(i).getTime_millis() - start;
+                float interpolation = interpolator.getInterpolation((float) elapsed
                         / duration);
-                if (i < directionPoint.size())
-                    marker.setPosition(new LatLng(directionPoint.get(i).getLatitude(), directionPoint.get(i).getLongitude()));
+                if (i < path.size())
+                    marker.setPosition(new LatLng(path.get(i).getLatitude(), path.get(i).getLongitude()));
                 i++;
 
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    long delay = 16;
-                    if (i < directionPoint.size()) {
-                        delay =( ( directionPoint.get(i).getTime_millis() - directionPoint.get(i-1).getTime_millis() ) ) * animateDuration / duration;
-                        Log.d(TAG, "run: delay: " + delay);
+                if (interpolation < 1.0) {
+                    long delay = 0;
+                    if (i < path.size()) {
+                        delay =( ( path.get(i).getTime_millis() - path.get(i-1).getTime_millis() ) ) * Constants.ANIMATION_TIME / duration;
                     }
                     handler.postDelayed(this, delay);
-                } else {
-
                 }
             }
         });

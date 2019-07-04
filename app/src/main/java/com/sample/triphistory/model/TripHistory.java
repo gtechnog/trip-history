@@ -1,5 +1,7 @@
 package com.sample.triphistory.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class TripHistory {
         return Objects.hash(trips);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "TripHistory{" +

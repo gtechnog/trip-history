@@ -1,9 +1,10 @@
 package com.sample.triphistory.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +64,7 @@ public class Trip {
         return Objects.hash(id, startTime, endTime, path);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Trip{" +

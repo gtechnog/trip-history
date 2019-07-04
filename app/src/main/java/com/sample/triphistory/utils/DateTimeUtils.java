@@ -15,6 +15,11 @@ import java.util.Locale;
  */
 public class DateTimeUtils {
 
+    /**
+     * converts the date format {@link Constants#DATE_FORMAT} to {@link Constants#DISPLAY_DATE_FORMAT} display format
+     * @param date date with date_format
+     * @return string date with display format
+     */
     @Nullable
     public static String getDisplayTime(@Nullable String date) {
         if (date == null || date.isEmpty()) return date;
@@ -28,6 +33,11 @@ public class DateTimeUtils {
         return date;
     }
 
+    /**
+     * convert the date with ({@link Constants#DATE_FORMAT}) to milli seconds
+     * @param dateString date string with {@link Constants#DATE_FORMAT}
+     * @return millies seconds
+     */
     public static long getTimeMillies(String dateString) {
         if (dateString == null || dateString.isEmpty()) return 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
@@ -42,4 +52,16 @@ public class DateTimeUtils {
         }
         return time;
     }
+
+    // TODO: implement method
+    public static boolean isToday() {
+        return false;
+    }
+
+
+    // TODO: implements method
+    public static boolean isYesterday() {
+        return false;
+    }
+
 }

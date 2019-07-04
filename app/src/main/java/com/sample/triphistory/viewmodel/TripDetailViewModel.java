@@ -1,8 +1,6 @@
 package com.sample.triphistory.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
-import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,38 +8,45 @@ import androidx.lifecycle.AndroidViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.sample.triphistory.model.Step;
 import com.sample.triphistory.model.Trip;
 import com.sample.triphistory.model.TripHistoryRepository;
 import com.sample.triphistory.utils.DateTimeUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TripDetailViewModel extends AndroidViewModel {
 
-    private final Context context;
-    private final TripHistoryRepository repository;
-    private final String tripId;
     private Trip currentTrip;
 
     TripDetailViewModel(@NonNull Application application,
                         @NonNull TripHistoryRepository repository,
                         @NonNull String tripId) {
         super(application);
-        this.context = application;
-        this.repository = repository;
-        this.tripId = tripId;
-        currentTrip = repository.getTripDetailById(context, tripId);
+        currentTrip = repository.getTripDetailById(application, tripId);
     }
 
+    /**
+     * to get the start positions marker options
+     * @return MarkerOptions
+     */
     public MarkerOptions getStartMarkerOptions() {
         return new MarkerOptions().position(getStartLatLng());
     }
 
+    /**
+     * to get the end positions marker options
+     * @return MarkerOptions
+     */
+    public MarkerOptions getEndMarkerOptions() {
+        return new MarkerOptions().position(getEndLatLng());
+    }
+
+    /**
+     * To get the start point LatLng
+     * @return Latlng
+     */
     private LatLng getStartLatLng() {
         LatLng latLng = null;
         if (currentTrip.getPath() != null && currentTrip.getPath().size() > 0) {
@@ -52,10 +57,10 @@ public class TripDetailViewModel extends AndroidViewModel {
         return latLng;
     }
 
-    public MarkerOptions getEndMarkerOptions() {
-        return new MarkerOptions().position(getEndLatLng());
-    }
-
+    /**
+     * To get the end point LatLng
+     * @return Latlng
+     */
     private LatLng getEndLatLng() {
         LatLng latLng = null;
         if (currentTrip.getPath() != null && currentTrip.getPath().size() > 0) {
@@ -66,6 +71,10 @@ public class TripDetailViewModel extends AndroidViewModel {
         return latLng;
     }
 
+    /**
+     *  To get the trip boundaries including all the path positions also
+     * @return LatLngBounds
+     */
     public LatLngBounds getTripBounds() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(getStartLatLng());
@@ -77,6 +86,10 @@ public class TripDetailViewModel extends AndroidViewModel {
         return builder.build();
     }
 
+    /**
+     * To get the list of all the LatLng along the path
+     * @return List of all latlng along the path
+     */
     public List<LatLng> getPathLatLngList() {
         ArrayList<LatLng> list = new ArrayList<>();
         for (Step step : currentTrip.getPath()) {
@@ -86,14 +99,26 @@ public class TripDetailViewModel extends AndroidViewModel {
         return list;
     }
 
+    /**
+     * to get the list of steps taken during the trip
+     * @return list of steps
+     */
     public List<Step> getPath() {
         return currentTrip.getPath();
     }
 
+    /**
+     * To get start time of trip in millis
+     * @return seconds in millis
+     */
     public long getStartTimeInMillies() {
         return DateTimeUtils.getTimeMillies(currentTrip.getStartTime());
     }
 
+    /**
+     *  To get the end time of trip in millis
+     * @return seconds in millis
+     */
     public long getEndTimeInMillies() {
         return DateTimeUtils.getTimeMillies(currentTrip.getEndTime());
     }
