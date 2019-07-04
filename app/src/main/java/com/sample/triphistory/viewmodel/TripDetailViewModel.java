@@ -2,6 +2,7 @@ package com.sample.triphistory.viewmodel;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,44 +10,42 @@ import androidx.lifecycle.AndroidViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.sample.triphistory.model.Step;
 import com.sample.triphistory.model.Trip;
-import com.sample.triphistory.utils.Repository;
+import com.sample.triphistory.model.TripHistoryRepository;
+import com.sample.triphistory.utils.DateTimeUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class TripDetailViewModel extends AndroidViewModel {
 
-    private Context context;
+    private final Context context;
+    private final TripHistoryRepository repository;
+    private final String tripId;
     private Trip currentTrip;
-    private String tripId;
 
-    public TripDetailViewModel(@NonNull Application application) {
+    TripDetailViewModel(@NonNull Application application,
+                        @NonNull TripHistoryRepository repository,
+                        @NonNull String tripId) {
         super(application);
-        context = application;
-    }
-
-    /*
-     * this must be called as this view model is dependent on this trip id.
-     */
-    public void setTripId(@NonNull String tripId) {
+        this.context = application;
+        this.repository = repository;
         this.tripId = tripId;
-    }
-
-    public Trip getTripDetails() {
-        currentTrip =  Repository.getTripHistoryRepository().getTripDetailById(context, tripId);
-        return currentTrip;
+        currentTrip = repository.getTripDetailById(context, tripId);
     }
 
     public MarkerOptions getStartMarkerOptions() {
         return new MarkerOptions().position(getStartLatLng());
     }
 
-    public LatLng getStartLatLng() {
-        if (currentTrip == null) getTripDetails();
+    private LatLng getStartLatLng() {
         LatLng latLng = null;
         if (currentTrip.getPath() != null && currentTrip.getPath().size() > 0) {
-            LinkedList<Step> path = currentTrip.getPath();
+            List<Step> path = currentTrip.getPath();
             Step startStep = path.get(0);
             latLng = new LatLng(startStep.getLatitude(), startStep.getLongitude());
         }
@@ -57,19 +56,45 @@ public class TripDetailViewModel extends AndroidViewModel {
         return new MarkerOptions().position(getEndLatLng());
     }
 
-    public LatLng getEndLatLng() {
-        if (currentTrip == null) getTripDetails();
+    private LatLng getEndLatLng() {
         LatLng latLng = null;
         if (currentTrip.getPath() != null && currentTrip.getPath().size() > 0) {
-            LinkedList<Step> path = currentTrip.getPath();
+            List<Step> path = currentTrip.getPath();
             Step endStep = path.get(path.size() - 1);
             latLng = new LatLng(endStep.getLatitude(), endStep.getLongitude());
         }
         return latLng;
     }
 
-    public LatLngBounds getTripBoundary() {
-        return  new LatLngBounds(
-                new LatLng(-44, 113), new LatLng(-10, 154));
+    public LatLngBounds getTripBounds() {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(getStartLatLng());
+        builder.include(getEndLatLng());
+        List<LatLng> list = getPathLatLngList();
+        for (LatLng latLng : list) {
+            builder.include(latLng);
+        }
+        return builder.build();
+    }
+
+    public List<LatLng> getPathLatLngList() {
+        ArrayList<LatLng> list = new ArrayList<>();
+        for (Step step : currentTrip.getPath()) {
+            LatLng latLng = new LatLng(step.getLatitude(), step.getLongitude());
+            list.add(latLng);
+        }
+        return list;
+    }
+
+    public List<Step> getPath() {
+        return currentTrip.getPath();
+    }
+
+    public long getStartTimeInMillies() {
+        return DateTimeUtils.getTimeMillies(currentTrip.getStartTime());
+    }
+
+    public long getEndTimeInMillies() {
+        return DateTimeUtils.getTimeMillies(currentTrip.getEndTime());
     }
 }

@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.fragments.TripHistoryListFragment"
+    tools:context=".ui.TripHistoryListFragment"
     tools:listitem="@layout/trip_item" />

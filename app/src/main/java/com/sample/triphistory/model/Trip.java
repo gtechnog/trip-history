@@ -2,9 +2,14 @@ package com.sample.triphistory.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
+/**
+ *  Data holder class, holds trip information
+ */
 public class Trip {
 
     @SerializedName("trip_id")
@@ -17,9 +22,9 @@ public class Trip {
     private String endTime;
 
     @SerializedName("simple_path")
-    private LinkedList<Step> path;
+    private ArrayList<Step> path;
 
-    public Trip(Long id, String startTime, String endTime, LinkedList<Step> path) {
+    public Trip(Long id, String startTime, String endTime, ArrayList<Step> path) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -38,7 +43,7 @@ public class Trip {
         return id.toString();
     }
 
-    public LinkedList<Step> getPath() {
+    public List<Step> getPath() {
         return path;
     }
 

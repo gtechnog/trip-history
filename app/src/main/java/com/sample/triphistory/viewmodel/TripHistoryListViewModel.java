@@ -7,18 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.sample.triphistory.model.TripHistory;
-import com.sample.triphistory.utils.Repository;
+import com.sample.triphistory.model.TripHistoryRepository;
 
 public class TripHistoryListViewModel extends AndroidViewModel {
 
+    private final TripHistoryRepository repository;
     private Context context;
 
-    public TripHistoryListViewModel(@NonNull Application application) {
+    TripHistoryListViewModel(@NonNull Application application, @NonNull TripHistoryRepository repository) {
         super(application);
         context = application;
+        this.repository = repository;
     }
 
     public TripHistory getTripHistory() {
-        return Repository.getTripHistoryRepository().getTripHistoryList(context);
+        return repository.getTripHistoryList(context);
     }
 }

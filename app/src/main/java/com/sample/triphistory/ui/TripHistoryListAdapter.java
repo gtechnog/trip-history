@@ -1,6 +1,5 @@
-package com.sample.triphistory.ui.adapters;
+package com.sample.triphistory.ui;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sample.triphistory.R;
-import com.sample.triphistory.constant.Constants;
-import com.sample.triphistory.helper.Dispatcher;
+import com.sample.triphistory.utils.Dispatcher;
 import com.sample.triphistory.model.Trip;
 import com.sample.triphistory.model.TripHistory;
 import com.sample.triphistory.utils.DateTimeUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-
 public class TripHistoryListAdapter extends RecyclerView.Adapter<TripHistoryListAdapter.ViewHolder> {
-
-
     private static final String TAG = TripHistoryListAdapter.class.getSimpleName();
     private TripHistory tripHistory;
 
-    public TripHistoryListAdapter(@NonNull TripHistory tripHistory) {
+    TripHistoryListAdapter(@NonNull TripHistory tripHistory) {
         this.tripHistory = tripHistory;
     }
 

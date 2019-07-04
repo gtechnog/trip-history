@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+/**
+ * Data holder class which holds the information of location at a specific time.
+ */
 public class Step {
 
     public Step(Double latitude, String timestamp, Double longitude, Double time_millis) {
@@ -33,6 +36,10 @@ public class Step {
 
     public Double getLongitude() {
         return longitude;
+    }
+
+    public long getTime_millis() {
+        return Math.round(time_millis);
     }
 
     @Override

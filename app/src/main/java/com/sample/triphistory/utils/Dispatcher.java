@@ -1,4 +1,4 @@
-package com.sample.triphistory.helper;
+package com.sample.triphistory.utils;
 
 import android.content.Context;
 import android.content.Intent;

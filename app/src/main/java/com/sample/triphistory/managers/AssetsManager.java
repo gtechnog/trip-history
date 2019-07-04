@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ *  AssetsManager is responsible for managing the assets in application.
+ */
 public class AssetsManager {
 
     private static final String TRIP_HISTORY_FILE_NAME = "trip_history.json";
@@ -16,7 +19,12 @@ public class AssetsManager {
     public AssetsManager(@NonNull AssetManager assetManager) {
         mAssetManager = assetManager;
     }
-    public String getTripsHistory() {
+
+    /**
+     * Reads the trip_history.json file from assets
+     * @return json file as string value
+     */
+    public String readTripHistoryFile() {
         String jsonString = "";
         try {
             InputStream inputStream = mAssetManager.open(TRIP_HISTORY_FILE_NAME);

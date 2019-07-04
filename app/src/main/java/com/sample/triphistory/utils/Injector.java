@@ -8,7 +8,10 @@ import com.sample.triphistory.model.TripHistoryRepository;
 import com.sample.triphistory.viewmodel.TripDetailViewModelFactory;
 import com.sample.triphistory.viewmodel.TripHistoryListViewModelFactory;
 
-public class InjectorUtils {
+/**
+ *  Responsible for injecting the dependencies in view models
+ */
+public class Injector {
 
     public static TripDetailViewModelFactory provideTripDetailViewModelFactory(@NonNull Application application, @NonNull String tripId) {
         return new TripDetailViewModelFactory(application, getTripHistoryRepository(), tripId);

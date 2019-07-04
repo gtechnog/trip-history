@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ *  Data holder class, holds the history of user's trip
+ */
 public class TripHistory {
 
     @SerializedName("trips")

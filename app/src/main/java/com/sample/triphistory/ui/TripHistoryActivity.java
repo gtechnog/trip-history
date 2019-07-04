@@ -1,11 +1,10 @@
-package com.sample.triphistory.ui.activities;
+package com.sample.triphistory.ui;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sample.triphistory.R;
-import com.sample.triphistory.ui.fragments.TripHistoryListFragment;
 
 public class TripHistoryActivity extends AppCompatActivity {
 
